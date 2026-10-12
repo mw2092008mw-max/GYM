@@ -1,0 +1,143 @@
+:root {
+  --accent: #4b9dff;
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  --ink: #f0f2ee;
+  --panel: #e5e8e2;
+  --panel-2: #d9ddd6;
+  --line: #c5cbc2;
+  --paper: #171a16;
+  --muted: #62675f;
+  color-scheme: light;
+}
+
+html[lang="en"] body {
+  font-family: var(--font-en);
+}
+
+.site-header,
+.hero,
+.ritual {
+  color: #ecece5;
+}
+
+.lime-dot {
+  box-shadow: 0 0 14px rgba(75, 157, 255, 0.7);
+}
+
+.membership-featured {
+  background: rgba(75, 157, 255, 0.045);
+}
+
+.coach-stamp {
+  border-color: rgba(75, 157, 255, 0.5);
+}
+
+.nav-cta:hover,
+.button-lime:hover {
+  background: #d7eaff;
+}
+
+.floor-plan {
+  background: #1c2023;
+}
+
+.header-tools {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  direction: ltr;
+}
+
+.language-toggle,
+.theme-toggle {
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(9, 10, 9, 0.18);
+  color: #ecece5;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.language-toggle {
+  font: 700 10px/1 var(--font-en);
+  letter-spacing: 0.08em;
+}
+
+.theme-toggle svg {
+  width: 17px;
+  height: 17px;
+}
+
+.theme-moon {
+  display: none;
+}
+
+:root[data-theme="light"] .theme-sun {
+  display: none;
+}
+
+:root[data-theme="light"] .theme-moon {
+  display: block;
+}
+
+.language-toggle:hover,
+.theme-toggle:hover,
+.header-tools .menu-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.language-toggle:focus-visible,
+.theme-toggle:focus-visible,
+.menu-toggle:focus-visible,
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.form-submit svg {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+}
+
+:root[data-theme="light"] .footer-wordmark {
+  color: #dfe3dc;
+}
+
+:root[data-theme="light"] .site-footer .brand-name small {
+  color: #60655e;
+}
+
+@media (max-width: 700px) {
+  .site-header {
+    justify-content: space-between;
+  }
+
+  .header-tools {
+    gap: 6px;
+  }
+
+  .language-toggle,
+  .theme-toggle {
+    width: 36px;
+    height: 36px;
+  }
+
+  .header-tools .menu-toggle {
+    margin: 0;
+  }
+
+  html[lang="en"] .hero-title-bottom {
+    margin-left: 3vw;
+  }
+}
+
