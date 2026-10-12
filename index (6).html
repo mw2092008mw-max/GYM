@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IRON DISTRICT | الجيم الفاخر للياقة البدنية</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* ==========================================================================
+       DESIGN SYSTEM & CSS VARIABLES
+       ========================================================================== */
+    :root {
+      --bg-obsidian: #08080A;
+      --bg-graphite: #141418;
+      --bg-card: #18181F;
+      --accent-lime: #D4FF00;
+      --accent-lime-glow: rgba(212, 255, 0, 0.2);
+      --steel-grey: #2A2A32;
+      --text-main: #FFFFFF;
+      --text-muted: #A1A1AA;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      
+      --font-display: 'Syne', sans-serif;
+      --font-arabic: 'Cairo', sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--bg-obsidian);
+      color: var(--text-main);
+      font-family: var(--font-arabic);
+      overflow-x: hidden;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Accessibility Fix: Respect User Reduced Motion Preferences */
+    @media (prefers-reduced-motion: reduce) {
+      *, ::before, ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-obsidian); }
+    ::-webkit-scrollbar-thumb { background: var(--steel-grey); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent-lime); }
+
+    /* Film Grain Background Overlay */
+    .film-grain {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.03;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+
+    /* Safe Custom Cursor for Pointer Devices Only */
+    .custom-cursor { display: none; }
+    @media (hover: hover) and (pointer: fine) {
+      .custom-cursor {
+        display: block;
+        position: fixed;
+        width: 18px;
+        height: 18px;
+        border: 2px solid var(--accent-lime);
+        border-radius: 50%;
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        transition: transform 0.08s ease-out, width 0.2s ease, height 0.2s ease, background-color 0.2s ease;
+        z-index: 999999;
+      }
+      .custom-cursor.hovered {
+        width: 44px;
+        height: 44px;
+        background-color: var(--accent-lime-glow);
+      }
+    }
+
+    /* Selection Color */
+    ::selection { background-color: var(--accent-lime); color: var(--bg-obsidian); }
+
+    /* Buttons & Utilities */
+    .text-lime { color: var(--accent-lime); }
+    
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 32px;
+      background-color: var(--accent-lime);
+      color: var(--bg-obsidian);
+      font-weight: 800;
+      font-size: 0.95rem;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+    }
+    .btn-primary:hover {
+      background-color: #FFFFFF;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px var(--accent-lime-glow);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 32px;
+      background: transparent;
+      color: var(--text-main);
+      font-weight: 700;
+      text-decoration: none;
+      border: 1px solid var(--steel-grey);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .btn-secondary:hover {
+      border-color: var(--accent-lime);
+      color: var(--accent-lime);
+      background: rgba(212, 255, 0, 0.05);
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 900;
+      line-height: 1.15;
+      text-transform: uppercase;
+    }
+
+    /* Scroll Reveal Animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    }
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Modal System */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 8, 10, 0.88);
+      backdrop-filter: blur(10px);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-box {
+      background: var(--bg-card);
+      border: 1px solid var(--accent-lime);
+      padding: 40px;
+      max-width: 480px;
+      width: 90%;
+      text-align: center;
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+    .modal-overlay.active .modal-box {
+      transform: translateY(0);
+    }
+
+    /* ==========================================================================
+       HEADER & NAVIGATION
+       ========================================================================== */
+    header {
+      position: fixed;
+      top: 0; left: 0; width: 100%;
+      z-index: 1000;
+      padding: 20px 5%;
+      transition: all 0.3s ease;
+      background: linear-gradient(to bottom, rgba(8,8,10,0.95), rgba(8,8,10,0));
+    }
+    header.scrolled {
+      padding: 14px 5%;
+      background: rgba(14, 14, 18, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .nav-container {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--text-main);
+      text-decoration: none;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .logo span { color: var(--accent-lime); }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 700;
+      transition: color 0.3s ease;
+    }
+    .nav-links a:hover { color: var(--accent-lime); }
+
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text-main);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    /* ==========================================================================
+       HERO SECTION
+       ========================================================================== */
+    .hero {
+      min-height: 100vh;
+      padding: 150px 5% 80px 5%;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      background-color: var(--bg-obsidian);
+    }
+    .hero-container {
+      max-width: 1300px;
+      width: 100%;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: rgba(212, 255, 0, 0.08);
+      border: 1px solid rgba(212, 255, 0, 0.25);
+      color: var(--accent-lime);
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .hero-title {
+      font-size: clamp(2.5rem, 5vw, 4.2rem);
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .hero-desc {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      max-width: 520px;
+    }
+    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+    
+    .hero-visual {
+      position: relative;
+      height: 520px;
+      border: 1px solid var(--steel-grey);
+      overflow: hidden;
+    }
+    .hero-visual img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: grayscale(100%) contrast(120%);
+      transition: filter 0.5s ease, transform 0.5s ease;
+    }
+    .hero-visual:hover img {
+      filter: grayscale(20%) contrast(105%);
+      transform: scale(1.03);
+    }
+
+    /* ==========================================================================
+       SUBSCRIPTIONS & PRICING
+       ========================================================================== */
+    .subscriptions {
+      padding: 120px 5%;
+      background-color: var(--bg-graphite);
+    }
+    .plans-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 36px 0 50px 0;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      padding: 12px 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--steel-grey);
+      color: var(--text-muted);
+      font-family: var(--font-arabic);
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .tab-btn.active, .tab-btn:hover {
+      background: var(--accent-lime);
+      color: var(--bg-obsidian);
+      border-color: var(--accent-lime);
+    }
+
+    .pricing-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+
+    .price-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--steel-grey);
+      padding: 40px 30px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color 0.3s ease, transform 0.3s ease;
+    }
+    .price-card.featured {
+      border: 2px solid var(--accent-lime);
+      box-shadow: 0 10px 30px rgba(212, 255, 0, 0.1);
+    }
+    .price-card:hover { transform: translateY(-5px); }
+
+    .plan-badge {
+      position: absolute;
+      top: -14px;
+      right: 24px;
+      background: var(--accent-lime);
+      color: var(--bg-obsidian);
+      font-size: 0.75rem;
+      font-weight: 900;
+      padding: 4px 12px;
+      text-transform: uppercase;
+    }
+
+    .plan-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 8px; }
+    .plan-price {
+      font-family: var(--font-display);
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin: 16px 0 4px 0;
+    }
+    .plan-price span { font-size: 1rem; color: var(--text-muted); font-family: var(--font-arabic); }
+    .plan-subtext { font-size: 0.85rem; color: var(--accent-lime); font-weight: 700; margin-bottom: 24px; min-height: 20px; }
+
+    .plan-features {
+      list-style: none;
+      margin-bottom: 32px;
+    }
+    .plan-features li {
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .plan-features li i { color: var(--accent-lime); }
+
+    /* ==========================================================================
+       ZONES & FACILITIES
+       ========================================================================== */
+    .zones { padding: 120px 5%; background-color: var(--bg-obsidian); }
+    .bento-grid {
+      max-width: 1200px;
+      margin: 50px auto 0 auto;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-auto-rows: 260px;
+      gap: 20px;
+    }
+    .bento-card {
+      background: var(--bg-card);
+      border: 1px solid var(--steel-grey);
+      position: relative;
+      overflow: hidden;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+    .bento-card img {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover;
+      filter: grayscale(100%) brightness(35%);
+      transition: transform 0.5s ease, filter 0.5s ease;
+      z-index: 1;
+    }
+    .bento-card:hover img { filter: grayscale(30%) brightness(50%); transform: scale(1.05); }
+    .bento-content { position: relative; z-index: 2; }
+    .bento-1 { grid-column: span 7; }
+    .bento-2 { grid-column: span 5; }
+    .bento-3 { grid-column: span 5; }
+    .bento-4 { grid-column: span 7; }
+
+    /* ==========================================================================
+       MAP & CONTACT (REAL GOOGLE MAPS)
+       ========================================================================== */
+    .contact-section {
+      padding: 120px 5%;
+      background-color: var(--bg-graphite);
+      border-top: 1px solid var(--border-subtle);
+    }
+    .contact-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+    }
+    
+    .map-wrapper {
+      width: 100%;
+      height: 100%;
+      min-height: 400px;
+      border: 1px solid var(--steel-grey);
+      position: relative;
+    }
+    .map-wrapper iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      filter: invert(90%) hue-rotate(180deg) contrast(120%);
+    }
+
+    .info-list { list-style: none; margin: 24px 0 32px 0; }
+    .info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 20px;
+      font-size: 1rem;
+      color: var(--text-muted);
+    }
+    .info-item i {
+      color: var(--accent-lime);
+      font-size: 1.2rem;
+      margin-top: 4px;
+    }
+
+    /* Form Design */
+    .booking-form {
+      background: var(--bg-card);
+      border: 1px solid var(--steel-grey);
+      padding: 36px;
+    }
+    .form-group { margin-bottom: 20px; }
+    .form-label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .form-input {
+      width: 100%;
+      padding: 14px;
+      background: var(--bg-obsidian);
+      border: 1px solid var(--steel-grey);
+      color: var(--text-main);
+      font-family: var(--font-arabic);
+      font-size: 0.95rem;
+    }
+    .form-input:focus { outline: none; border-color: var(--accent-lime); }
+
+    /* FOOTER */
+    footer {
+      background-color: var(--bg-obsidian);
+      padding: 60px 5% 30px 5%;
+      border-top: 1px solid var(--border-subtle);
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* Responsive Design Breakpoints */
+    @media (max-width: 992px) {
+      .hero-container { grid-template-columns: 1fr; }
+      .hero-visual { height: 380px; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .bento-grid { grid-template-columns: 1fr; }
+      .bento-1, .bento-2, .bento-3, .bento-4 { grid-column: span 1; }
+      .contact-container { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        position: fixed;
+        top: 0; right: -100%;
+        width: 75%; height: 100vh;
+        background: var(--bg-obsidian);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transition: right 0.4s ease;
+        border-left: 1px solid var(--steel-grey);
+      }
+      .nav-links.open { right: 0; }
+      .menu-toggle { display: block; z-index: 1001; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Film Grain Overlay -->
+  <div class="film-grain"></div>
+
+  <!-- Custom Cursor -->
+  <div class="custom-cursor" id="cursor"></div>
+
+  <!-- HEADER -->
+  <header id="header">
+    <div class="nav-container">
+      <a href="#" class="logo">
+        IRON <span>DISTRICT</span>
+      </a>
+
+      <button class="menu-toggle" id="menuToggle" aria-label="القائمة">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#hero">الرئيسية</a></li>
+        <li><a href="#membership">الاشتراكات</a></li>
+        <li><a href="#zones">المناطق</a></li>
+        <li><a href="#contact">الحجز والتواصل</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero" id="hero">
+    <div class="hero-container">
+      <div class="hero-content reveal">
+        <div class="hero-tag">
+          <i class="fa-solid fa-bolt"></i>
+          تجربة تدريب رياضية فاخرة
+        </div>
+        <h1 class="hero-title">
+          اصنع لياقتك البدنية <br>
+          <span class="text-lime">في IRON DISTRICT</span>
+        </h1>
+        <p class="hero-desc">
+          بيئة تدريبية متكاملة بأحدث الأجهزة الرياضية ومؤهلة لأعلى مستويات الأداء البدني، مع توجيه احترافي وبرامج استشفاء متطورة.
+        </p>
+        <div class="hero-actions">
+          <a href="#contact" class="btn-primary">
+            احجز زيارتك الآن
+            <i class="fa-brands fa-whatsapp"></i>
+          </a>
+          <a href="#membership" class="btn-secondary">أسعار الاشتراكات</a>
+        </div>
+      </div>
+
+      <div class="hero-visual reveal">
+        <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1000&auto=format&fit=crop" alt="Iron District Gym">
+      </div>
+    </div>
+  </section>
+
+  <!-- SUBSCRIPTIONS & PRICING -->
+  <section class="subscriptions" id="membership">
+    <div style="text-align: center; max-width: 600px; margin: 0 auto;" class="reveal">
+      <span class="text-lime" style="font-weight: 800; letter-spacing: 1px;">خطط الاشتراكات</span>
+      <h2 class="section-title">اختر الباقة المناسبة لك</h2>
+    </div>
+
+    <!-- Duration Filter Tabs - Fix 3: Direct Button Parameter Passing -->
+    <div class="plans-tabs reveal">
+      <button class="tab-btn active" onclick="switchDuration('1m', this)">شهر واحد</button>
+      <button class="tab-btn" onclick="switchDuration('3m', this)">3 شهور (خصم 10%)</button>
+      <button class="tab-btn" onclick="switchDuration('6m', this)">6 شهور (خصم 15%)</button>
+      <button class="tab-btn" onclick="switchDuration('12m', this)">سنوي (خصم 25%)</button>
+    </div>
+
+    <div class="pricing-grid">
+      <!-- Standard Plan -->
+      <div class="price-card reveal">
+        <div>
+          <div class="plan-title">الباقة الأساسية</div>
+          <div class="plan-price" id="p1-price">800 <span>ج.م</span></div>
+          <div class="plan-subtext" id="p1-subtext">تدفع شهرياً</div>
+          
+          <ul class="plan-features">
+            <li><i class="fa-solid fa-check"></i> دخول جميع صالات الأوزان واللياقة</li>
+            <li><i class="fa-solid fa-check"></i> خزانة ملابس خاصة أثناء التدريب</li>
+            <li><i class="fa-solid fa-check"></i> قياس InBody مرة واحدة مجاناً</li>
+          </ul>
+        </div>
+        <button class="btn-secondary" style="width: 100%; justify-content: center;" onclick="selectPlan('الباقة الأساسية')">
+          استفسر أو اشترك
+        </button>
+      </div>
+
+      <!-- VIP Plan (Featured) -->
+      <div class="price-card featured reveal">
+        <div class="plan-badge">الأكثر إقبالاً</div>
+        <div>
+          <div class="plan-title" style="color: var(--accent-lime);">الباقة الذهبية (VIP)</div>
+          <div class="plan-price" id="p2-price">1,400 <span>ج.م</span></div>
+          <div class="plan-subtext" id="p2-subtext">تدفع شهرياً</div>
+          
+          <ul class="plan-features">
+            <li><i class="fa-solid fa-check"></i> نفاذ كامل لكل الأقسام + الاستشفاء</li>
+            <li><i class="fa-solid fa-check"></i> دخول الساونا والجاكوزي مجاناً</li>
+            <li><i class="fa-solid fa-check"></i> برنامج غذائي وتدريبي مخصص</li>
+            <li><i class="fa-solid fa-check"></i> قياس InBody أسبوعي</li>
+          </ul>
+        </div>
+        <button class="btn-primary" style="width: 100%; justify-content: center;" onclick="selectPlan('الباقة الذهبية VIP')">
+          اشترك الآن عبر واتساب
+        </button>
+      </div>
+
+      <!-- Pro Personal Training -->
+      <div class="price-card reveal">
+        <div>
+          <div class="plan-title">باقة التدريب الشخصي</div>
+          <div class="plan-price" id="p3-price">2,500 <span>ج.م</span></div>
+          <div class="plan-subtext" id="p3-subtext">تدفع شهرياً</div>
+          
+          <ul class="plan-features">
+            <li><i class="fa-solid fa-check"></i> مدرب شخصي خاص (12 جلسة/شهر)</li>
+            <li><i class="fa-solid fa-check"></i> متابعة يومية للوجبات والتمارين</li>
+            <li><i class="fa-solid fa-check"></i> جميع مميزات الباقة الذهبية</li>
+          </ul>
+        </div>
+        <button class="btn-secondary" style="width: 100%; justify-content: center;" onclick="selectPlan('باقة التدريب الشخصي')">
+          استفسر عن المدربين
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ZONES -->
+  <section class="zones" id="zones">
+    <div style="text-align: center; max-width: 600px; margin: 0 auto;" class="reveal">
+      <span class="text-lime" style="font-weight: 800;">تجهيزات الجيم</span>
+      <h2 class="section-title">مناطق IRON DISTRICT</h2>
+    </div>
+
+    <div class="bento-grid">
+      <div class="bento-card bento-1 reveal">
+        <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=800&auto=format&fit=crop" alt="Heavy Weight Zone">
+        <div class="bento-content">
+          <h3 style="font-size: 1.4rem; font-weight: 800;">صالة الأوزان الحرة</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">أحدث الأجهزة والأوزان الأولمبية المجهزة للتمارين الشديدة.</p>
+        </div>
+      </div>
+
+      <div class="bento-card bento-2 reveal">
+        <img src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=800&auto=format&fit=crop" alt="Cardio Zone">
+        <div class="bento-content">
+          <h3 style="font-size: 1.4rem; font-weight: 800;">منطقة الكارديو</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">أجهزة سير ودرجات متطورة مزودة بشاشات متابعة أداء.</p>
+        </div>
+      </div>
+
+      <div class="bento-card bento-3 reveal">
+        <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=800&auto=format&fit=crop" alt="Crossfit">
+        <div class="bento-content">
+          <h3 style="font-size: 1.4rem; font-weight: 800;">منطقة اللياقة والكروس فيت</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">مساحة واسعة لتمارين السويدي واللياقة البدنية الجماعية.</p>
+        </div>
+      </div>
+
+      <div class="bento-card bento-4 reveal">
+        <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=800&auto=format&fit=crop" alt="Spa & Recovery">
+        <div class="bento-content">
+          <h3 style="font-size: 1.4rem; font-weight: 800;">منطقة الاستشفاء والساونا</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">خدمات الساونا والجاكوزي لراحة العضلات وسرعة الاستشفاء.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAP & WHATSAPP CONTACT -->
+  <section class="contact-section" id="contact">
+    <div class="contact-container">
+      
+      <!-- Info & Real Google Maps Embed -->
+      <div class="reveal">
+        <span class="text-lime" style="font-weight: 800;">تواصل معنا</span>
+        <h2 class="section-title">العنوان ومواعيد العمل</h2>
+        
+        <ul class="info-list">
+          <li class="info-item">
+            <i class="fa-solid fa-location-dot"></i>
+            <div>
+              <strong>العنوان:</strong><br>
+              شارع الجلاء الرئيسي، بجوار بنك مصر - الفرع الرئيسي
+            </div>
+          </li>
+          <li class="info-item">
+            <i class="fa-solid fa-clock"></i>
+            <div>
+              <strong>مواعيد العمل:</strong><br>
+              يومياً من 6:00 صباحاً حتى 12:00 منتصف الليل (الجمعة من 2:00 ظهراً)
+            </div>
+          </li>
+          <li class="info-item">
+            <i class="fa-brands fa-whatsapp"></i>
+            <div>
+              <strong>واتساب مباشر:</strong><br>
+              <a href="https://wa.me/201108342262" target="_blank" style="color: var(--accent-lime); text-decoration: none; font-weight: 700;">
+                01108342262
+              </a>
+            </div>
+          </li>
+        </ul>
+
+        <div class="map-wrapper">
+          <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3453.682626150242!2d31.2357116!3d30.0444196!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzDCsDAyJzM5LjkiTiAzMcKwMTQnMDguNiJF!5e0!3m2!1sar!2seg!4v1620000000000!5m2!1sar!2seg" 
+            allowfullscreen="" loading="lazy"></iframe>
+        </div>
+        <a href="https://maps.google.com" target="_blank" class="btn-secondary" style="margin-top: 16px; width: 100%; justify-content: center;">
+          <i class="fa-solid fa-diamond-turn-right"></i> فتح الاتجاهات في Google Maps
+        </a>
+      </div>
+
+      <!-- Integrated Booking Form (Fix 2 & Fix 4) -->
+      <div class="booking-form reveal">
+        <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 20px;">حجز الاشتراك / استفسار</h3>
+        
+        <form id="bookingForm" onsubmit="processBooking(event)">
+          <div class="form-group">
+            <label class="form-label">الاسم بالكامل</label>
+            <input type="text" id="clientName" class="form-input" placeholder="أدخل اسمك" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">رقم الموبايل / الواتساب</label>
+            <input type="tel" id="clientPhone" class="form-input" placeholder="010xxxxxxx" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">الباقة المحددة</label>
+            <select id="selectedPlan" class="form-input" onchange="updateFormPriceDisplay()">
+              <option value="الباقة الأساسية">الباقة الأساسية</option>
+              <option value="الباقة الذهبية VIP">الباقة الذهبية VIP</option>
+              <option value="باقة التدريب الشخصي">باقة التدريب الشخصي</option>
+              <option value="استفسار عام">استفسار عام عن الجيم</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">مدة الاشتراك</label>
+            <select id="selectedDurationSelect" class="form-input" onchange="syncDurationFromSelect(this.value)">
+              <option value="1m">شهر واحد</option>
+              <option value="3m">3 شهور (خصم 10%)</option>
+              <option value="6m">6 شهور (خصم 15%)</option>
+              <option value="12m">سنة كاملة (خصم 25%)</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="background: var(--bg-obsidian); padding: 12px; border: 1px dashed var(--steel-grey);">
+            <div style="font-size: 0.85rem; color: var(--text-muted);">السعر الإجمالي النهائي:</div>
+            <div id="finalCalculatedPrice" style="font-size: 1.3rem; font-weight: 800; color: var(--accent-lime);">800 ج.م</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">تاريخ الزيارة المقترح</label>
+            <input type="date" id="visitDate" class="form-input" required>
+          </div>
+
+          <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">
+            تأكيد الحجز وتجهيز الطلب
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Modal Confirmation & Local Booking Storage System (Fix 4) -->
+  <div class="modal-overlay" id="confirmationModal">
+    <div class="modal-box">
+      <i class="fa-solid fa-circle-check text-lime" style="font-size: 3rem; margin-bottom: 16px;"></i>
+      <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 12px;">تم حفظ الحجز بنجاح!</h3>
+      <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px;" id="modalDetailsText">
+        تم تسجيل بيانات الحجز وسعر الاشتراك في النظام المحلي. اضغط على الزر أدناه لإرسال التجميعة مباشرة لصاحب الجيم عبر واتساب.
+      </p>
+      
+      <button class="btn-primary" style="width: 100%; justify-content: center;" id="modalWhatsappBtn">
+        المتابعة لإرسال الرسالة عبر واتساب
+        <i class="fa-brands fa-whatsapp" style="font-size: 1.2rem;"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2026 IRON DISTRICT GYM. جميع الحقوق محفوظة.</p>
+  </footer>
+
+  <!-- ==========================================================================
+     JAVASCRIPT INTERACTIVITY & INTEGRATION (FIXES 2, 3, 4)
+     ========================================================================== -->
+  <script>
+    // System State Tracker (Fix 2)
+    let currentSelectedDuration = '1m';
+    
+    const planBasePrices = {
+      'الباقة الأساسية': { '1m': 800, '3m': 2160, '6m': 4080, '12m': 7200 },
+      'الباقة الذهبية VIP': { '1m': 1400, '3m': 3780, '6m': 7140, '12m': 12600 },
+      'باقة التدريب الشخصي': { '1m': 2500, '3m': 6750, '6m': 12750, '12m': 22500 },
+      'استفسار عام': { '1m': 0, '3m': 0, '6m': 0, '12m': 0 }
+    };
+
+    const durationLabels = {
+      '1m': 'شهر واحد',
+      '3m': '3 شهور',
+      '6m': '6 شهور',
+      '12m': 'سنة (12 شهر)'
+    };
+
+    // 1. Custom Cursor Logic
+    const cursor = document.getElementById('cursor');
+    if (cursor) {
+      document.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+      });
+
+      document.querySelectorAll('a, button, .price-card, .bento-card').forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+      });
+    }
+
+    // 2. Navigation Scroll & Mobile Toggle
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 40) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+    menuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+
+    // 3. Scroll Reveal Observer
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // 4. Subscriptions Pricing & Fix 3: Explicit Button Parameter Passing
+    const pricingData = {
+      '1m': {
+        p1: '800 <span>ج.م</span>', sub1: 'تدفع شهرياً',
+        p2: '1,400 <span>ج.م</span>', sub2: 'تدفع شهرياً',
+        p3: '2,500 <span>ج.م</span>', sub3: 'تدفع شهرياً'
+      },
+      '3m': {
+        p1: '720 <span>ج.م/شهر</span>', sub1: 'الإجمالي: 2,160 ج.م لـ 3 شهور',
+        p2: '1,260 <span>ج.م/شهر</span>', sub2: 'الإجمالي: 3,780 ج.م لـ 3 شهور',
+        p3: '2,250 <span>ج.م/شهر</span>', sub3: 'الإجمالي: 6,750 ج.م لـ 3 شهور'
+      },
+      '6m': {
+        p1: '680 <span>ج.م/شهر</span>', sub1: 'الإجمالي: 4,080 ج.م لـ 6 شهور',
+        p2: '1,190 <span>ج.م/شهر</span>', sub2: 'الإجمالي: 7,140 ج.م لـ 6 شهور',
+        p3: '2,125 <span>ج.م/شهر</span>', sub3: 'الإجمالي: 12,750 ج.م لـ 6 شهور'
+      },
+      '12m': {
+        p1: '600 <span>ج.م/شهر</span>', sub1: 'الإجمالي: 7,200 ج.م سنوياً (التزام سنوي)',
+        p2: '1,050 <span>ج.م/شهر</span>', sub2: 'الإجمالي: 12,600 ج.م سنوياً (التزام سنوي)',
+        p3: '1,875 <span>ج.م/شهر</span>', sub3: 'الإجمالي: 22,500 ج.م سنوياً (التزام سنوي)'
+      }
+    };
+
+    function switchDuration(dur, btnElement) {
+      currentSelectedDuration = dur;
+      
+      if (btnElement) {
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        btnElement.classList.add('active');
+      }
+
+      document.getElementById('selectedDurationSelect').value = dur;
+
+      const data = pricingData[dur];
+      document.getElementById('p1-price').innerHTML = data.p1;
+      document.getElementById('p1-subtext').innerText = data.sub1;
+
+      document.getElementById('p2-price').innerHTML = data.p2;
+      document.getElementById('p2-subtext').innerText = data.sub2;
+
+      document.getElementById('p3-price').innerHTML = data.p3;
+      document.getElementById('p3-subtext').innerText = data.sub3;
+
+      updateFormPriceDisplay();
+    }
+
+    function syncDurationFromSelect(val) {
+      currentSelectedDuration = val;
+      const tabs = document.querySelectorAll('.tab-btn');
+      const idxMap = { '1m': 0, '3m': 1, '6m': 2, '12m': 3 };
+      if (tabs[idxMap[val]]) {
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        tabs[idxMap[val]].classList.add('active');
+      }
+      switchDuration(val, null);
+    }
+
+    function selectPlan(planTitle) {
+      document.getElementById('selectedPlan').value = planTitle;
+      updateFormPriceDisplay();
+      document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function updateFormPriceDisplay() {
+      const plan = document.getElementById('selectedPlan').value;
+      const priceDisplay = document.getElementById('finalCalculatedPrice');
+
+      if (plan === 'استفسار عام') {
+        priceDisplay.innerText = 'حسب الاستفسار';
+        return;
+      }
+
+      const totalAmount = planBasePrices[plan][currentSelectedDuration];
+      priceDisplay.innerText = `${totalAmount.toLocaleString('ar-EG')} ج.م (${durationLabels[currentSelectedDuration]})`;
+    }
+
+    // 5. Fix 4: Local Storage Booking & WhatsApp System
+    function processBooking(event) {
+      event.preventDefault();
+
+      const name = document.getElementById('clientName').value;
+      const phone = document.getElementById('clientPhone').value;
+      const plan = document.getElementById('selectedPlan').value;
+      const duration = currentSelectedDuration;
+      const durationText = durationLabels[duration];
+      const date = document.getElementById('visitDate').value;
+      
+      const totalPrice = plan === 'استفسار عام' ? 'استفسار' : `${planBasePrices[plan][duration].toLocaleString('ar-EG')} ج.م`;
+
+      // A. Save to LocalStorage
+      const bookingRecord = {
+        id: 'ORD-' + Date.now(),
+        name,
+        phone,
+        plan,
+        duration: durationText,
+        totalPrice,
+        visitDate: date,
+        createdAt: new Date().toISOString()
+      };
+
+      const existingBookings = JSON.parse(localStorage.getItem('iron_district_bookings') || '[]');
+      existingBookings.push(bookingRecord);
+      localStorage.setItem('iron_district_bookings', JSON.stringify(existingBookings));
+
+      // B. Construct WhatsApp Message (Fix 2: Transferring Duration & Price)
+      const targetPhone = "201108342262";
+      const messageText = `مرحباً IRON DISTRICT GYM 👋%0Aأود تأكيد الحجز والاشتراك التالي:%0A- *الاسم:* ${encodeURIComponent(name)}%0A- *الهاتف:* ${encodeURIComponent(phone)}%0A- *الباقة:* ${encodeURIComponent(plan)}%0A- *مدة الاشتراك:* ${encodeURIComponent(durationText)}%0A- *السعر الإجمالي:* ${encodeURIComponent(totalPrice)}%0A- *تاريخ الزيارة المقترح:* ${encodeURIComponent(date)}`;
+
+      const whatsappURL = `https://wa.me/${targetPhone}?text=${messageText}`;
+
+      // C. Display Modal Confirmation System
+      const modal = document.getElementById('confirmationModal');
+      const whatsappBtn = document.getElementById('modalWhatsappBtn');
+
+      whatsappBtn.onclick = function() {
+        window.open(whatsappURL, '_blank');
+        modal.classList.remove('active');
+      };
+
+      modal.classList.add('active');
+    }
+  </script>
+</body>
+</html>
